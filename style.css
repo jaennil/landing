@@ -461,6 +461,262 @@ body {
     z-index: 1;
 }
 
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+/* Keyframe Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes gradientShift {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+@keyframes blink {
+    0%, 50% {
+        opacity: 1;
+    }
+    51%, 100% {
+        opacity: 0;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(99, 102, 241, 0.6);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Hero Animations - Initial State (hidden) */
+.hero-badge,
+.hero-title,
+.hero-subtitle,
+.hero-description,
+.hero-cta {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.hero-visual {
+    opacity: 0;
+    transform: translateX(50px);
+}
+
+/* Hero Animations - Animated State */
+.hero-badge.animate {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.hero-title.animate {
+    animation: fadeInUp 0.6s ease-out 0.1s forwards;
+}
+
+.hero-subtitle.animate {
+    animation: fadeInUp 0.6s ease-out 0.2s forwards;
+}
+
+.hero-description.animate {
+    animation: fadeInUp 0.6s ease-out 0.3s forwards;
+}
+
+.hero-cta.animate {
+    animation: fadeInUp 0.6s ease-out 0.4s forwards;
+}
+
+.hero-visual.animate {
+    animation: fadeInRight 0.8s ease-out 0.5s forwards;
+}
+
+/* Animated Gradient Text */
+.gradient-text-animated {
+    background: linear-gradient(
+        90deg,
+        var(--gradient-start),
+        var(--gradient-end),
+        var(--gradient-start)
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease-in-out infinite;
+}
+
+/* Typing Cursor */
+.typing-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 18px;
+    background: var(--accent-light);
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+    vertical-align: middle;
+}
+
+/* Code Block Typing */
+.code-block pre code {
+    white-space: pre;
+}
+
+.code-line {
+    display: block;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.code-line.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Glow Effect for Buttons */
+.btn-primary {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 8px;
+}
+
+.btn-primary:hover {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Scroll Animations - Initial State */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered Animations for Cards and Tags */
+.project-card {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.project-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.skill-category {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.skill-category.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.skill-tag {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out, border-color 0.2s, color 0.2s;
+}
+
+.skill-tag.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Stats Animation */
+.stat {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.stat.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Section Titles Animation */
+.section-title {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.section-title.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Contact Links Animation */
+.contact-link {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, border-color 0.2s;
+}
+
+.contact-link.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Code Block Float Animation */
+.code-block.float {
+    animation: float 4s ease-in-out infinite;
+}
+
 /* Responsive */
 @media (max-width: 968px) {
     .hero {

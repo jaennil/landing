@@ -29,7 +29,7 @@
             <div class="hero-content">
                 <div class="hero-badge">Available for work</div>
                 <h1 class="hero-title">
-                    <span class="gradient-text">Nikita Dubrovskikh</span>
+                    <span class="gradient-text gradient-text-animated">Nikita Dubrovskikh</span>
                 </h1>
                 <p class="hero-subtitle">Full-Stack Developer</p>
                 <p class="hero-description">
@@ -48,17 +48,7 @@
                         <span class="dot yellow"></span>
                         <span class="dot green"></span>
                     </div>
-                    <pre><code><span class="keyword">const</span> developer = {
-  name: <span class="string">"Nikita"</span>,
-  skills: [<span class="string">"TypeScript"</span>, <span class="string">"Python"</span>, <span class="string">"Go"</span>],
-  passion: <span class="string">"Building things"</span>,
-  coffee: <span class="number">Infinity</span>
-};
-
-<span class="keyword">while</span> (developer.coffee > <span class="number">0</span>) {
-  developer.<span class="function">code</span>();
-  developer.<span class="function">deploy</span>();
-}</code></pre>
+                    <pre><code id="typed-code"></code><span class="typing-cursor" id="cursor"></span></pre>
                 </div>
             </div>
         </section>
@@ -243,5 +233,304 @@
     <footer class="footer">
         <p>&copy; 2024 Nikita Dubrovskikh. Built with passion.</p>
     </footer>
+
+    <script>
+        // ============================================
+        // ANIMATION SCRIPTS
+        // ============================================
+
+        console.log('[Landing] Initializing animations...');
+
+        // Code lines for typing effect
+        const codeLines = [
+            { text: '<span class="keyword">const</span> developer = {', delay: 0 },
+            { text: '  name: <span class="string">"Nikita"</span>,', delay: 100 },
+            { text: '  skills: [<span class="string">"TypeScript"</span>, <span class="string">"Python"</span>, <span class="string">"Go"</span>],', delay: 100 },
+            { text: '  passion: <span class="string">"Building things"</span>,', delay: 100 },
+            { text: '  coffee: <span class="number">Infinity</span>', delay: 100 },
+            { text: '};', delay: 100 },
+            { text: '', delay: 50 },
+            { text: '<span class="keyword">while</span> (developer.coffee > <span class="number">0</span>) {', delay: 100 },
+            { text: '  developer.<span class="function">code</span>();', delay: 100 },
+            { text: '  developer.<span class="function">deploy</span>();', delay: 100 },
+            { text: '}', delay: 100 }
+        ];
+
+        // ============================================
+        // HERO ANIMATIONS ON LOAD
+        // ============================================
+        function animateHero() {
+            console.log('[Landing] Starting hero animations');
+            const heroElements = [
+                '.hero-badge',
+                '.hero-title',
+                '.hero-subtitle',
+                '.hero-description',
+                '.hero-cta',
+                '.hero-visual'
+            ];
+
+            heroElements.forEach(selector => {
+                const el = document.querySelector(selector);
+                if (el) {
+                    el.classList.add('animate');
+                    console.log(`[Landing] Animated: ${selector}`);
+                }
+            });
+
+            // Add float animation to code block after initial animation
+            setTimeout(() => {
+                const codeBlock = document.querySelector('.code-block');
+                if (codeBlock) {
+                    codeBlock.classList.add('float');
+                    console.log('[Landing] Code block float animation enabled');
+                }
+            }, 1500);
+        }
+
+        // ============================================
+        // TYPING EFFECT
+        // ============================================
+        function typeCode() {
+            console.log('[Landing] Starting typing effect');
+            const codeContainer = document.getElementById('typed-code');
+            const cursor = document.getElementById('cursor');
+            if (!codeContainer) {
+                console.warn('[Landing] Code container not found');
+                return;
+            }
+
+            let lineIndex = 0;
+            let charIndex = 0;
+            let currentLine = '';
+            let isTag = false;
+
+            function getPlainText(html) {
+                const temp = document.createElement('div');
+                temp.innerHTML = html;
+                return temp.textContent || temp.innerText || '';
+            }
+
+            function type() {
+                if (lineIndex >= codeLines.length) {
+                    console.log('[Landing] Typing complete');
+                    cursor.style.display = 'none';
+                    return;
+                }
+
+                const line = codeLines[lineIndex];
+                const plainText = getPlainText(line.text);
+
+                if (charIndex < plainText.length) {
+                    charIndex++;
+                    // Find the corresponding position in HTML
+                    let htmlPos = 0;
+                    let textCount = 0;
+                    while (textCount < charIndex && htmlPos < line.text.length) {
+                        if (line.text[htmlPos] === '<') {
+                            while (htmlPos < line.text.length && line.text[htmlPos] !== '>') {
+                                htmlPos++;
+                            }
+                        }
+                        htmlPos++;
+                        if (htmlPos <= line.text.length && line.text[htmlPos - 1] !== '>') {
+                            textCount++;
+                        }
+                    }
+                    // Include any trailing tags
+                    while (htmlPos < line.text.length && line.text[htmlPos] === '<') {
+                        while (htmlPos < line.text.length && line.text[htmlPos] !== '>') {
+                            htmlPos++;
+                        }
+                        htmlPos++;
+                    }
+                    currentLine = line.text.substring(0, htmlPos);
+                    updateDisplay();
+                    setTimeout(type, 30 + Math.random() * 30);
+                } else {
+                    // Move to next line
+                    lineIndex++;
+                    charIndex = 0;
+                    currentLine = '';
+                    setTimeout(type, line.delay);
+                }
+            }
+
+            function updateDisplay() {
+                let html = '';
+                for (let i = 0; i < lineIndex; i++) {
+                    html += codeLines[i].text + '\n';
+                }
+                html += currentLine;
+                codeContainer.innerHTML = html;
+            }
+
+            // Start typing after hero animation completes
+            setTimeout(type, 1200);
+        }
+
+        // ============================================
+        // SCROLL ANIMATIONS (Intersection Observer)
+        // ============================================
+        function initScrollAnimations() {
+            console.log('[Landing] Initializing scroll animations');
+
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        console.log(`[Landing] Element visible: ${entry.target.className.split(' ')[0]}`);
+
+                        // Handle staggered animations for child elements
+                        if (entry.target.classList.contains('skills-grid')) {
+                            animateSkillCategories(entry.target);
+                        }
+                        if (entry.target.classList.contains('projects-grid')) {
+                            animateProjectCards(entry.target);
+                        }
+                        if (entry.target.classList.contains('about-stats')) {
+                            animateStats(entry.target);
+                        }
+                        if (entry.target.classList.contains('contact-links')) {
+                            animateContactLinks(entry.target);
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            // Observe section titles
+            document.querySelectorAll('.section-title').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Observe grids for staggered child animations
+            document.querySelectorAll('.skills-grid, .projects-grid, .about-stats, .contact-links').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Observe about text
+            document.querySelectorAll('.about-text').forEach(el => {
+                el.classList.add('fade-in-up');
+                observer.observe(el);
+            });
+
+            // Observe contact description
+            document.querySelectorAll('.contact-description').forEach(el => {
+                el.classList.add('fade-in-up');
+                observer.observe(el);
+            });
+        }
+
+        function animateSkillCategories(grid) {
+            const categories = grid.querySelectorAll('.skill-category');
+            categories.forEach((cat, index) => {
+                setTimeout(() => {
+                    cat.classList.add('visible');
+                    // Animate tags inside
+                    const tags = cat.querySelectorAll('.skill-tag');
+                    tags.forEach((tag, tagIndex) => {
+                        setTimeout(() => {
+                            tag.classList.add('visible');
+                        }, tagIndex * 50);
+                    });
+                }, index * 150);
+            });
+            console.log('[Landing] Skill categories animation started');
+        }
+
+        function animateProjectCards(grid) {
+            const cards = grid.querySelectorAll('.project-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('visible');
+                }, index * 200);
+            });
+            console.log('[Landing] Project cards animation started');
+        }
+
+        function animateStats(container) {
+            const stats = container.querySelectorAll('.stat');
+            stats.forEach((stat, index) => {
+                setTimeout(() => {
+                    stat.classList.add('visible');
+                    // Animate the number
+                    const numberEl = stat.querySelector('.stat-number');
+                    if (numberEl) {
+                        animateNumber(numberEl);
+                    }
+                }, index * 200);
+            });
+            console.log('[Landing] Stats animation started');
+        }
+
+        function animateContactLinks(container) {
+            const links = container.querySelectorAll('.contact-link');
+            links.forEach((link, index) => {
+                setTimeout(() => {
+                    link.classList.add('visible');
+                }, index * 150);
+            });
+            console.log('[Landing] Contact links animation started');
+        }
+
+        // ============================================
+        // ANIMATED COUNTERS
+        // ============================================
+        function animateNumber(element) {
+            const text = element.textContent;
+            const match = text.match(/(\d+)/);
+            if (!match) return;
+
+            const targetNumber = parseInt(match[0]);
+            const suffix = text.replace(/\d+/, '');
+            const duration = 1500;
+            const startTime = performance.now();
+
+            console.log(`[Landing] Animating counter to ${targetNumber}${suffix}`);
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                // Easing function (ease-out-cubic)
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const currentNumber = Math.floor(easeOut * targetNumber);
+
+                element.textContent = currentNumber + suffix;
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    element.textContent = targetNumber + suffix;
+                    console.log(`[Landing] Counter complete: ${targetNumber}${suffix}`);
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        // ============================================
+        // INITIALIZE ALL ANIMATIONS
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('[Landing] DOM loaded, starting animations');
+
+            // Start hero animations immediately
+            animateHero();
+
+            // Start typing effect
+            typeCode();
+
+            // Initialize scroll-based animations
+            initScrollAnimations();
+
+            console.log('[Landing] All animations initialized');
+        });
+    </script>
 </body>
 </html>
