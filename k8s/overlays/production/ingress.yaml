@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: landing
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: dubrovskih.ru
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: landing
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - dubrovskih.ru
+      secretName: landing-tls
