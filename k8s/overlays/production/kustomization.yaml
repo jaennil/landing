@@ -4,11 +4,11 @@ kind: Kustomization
 namespace: landing
 
 resources:
-  - ../../base
-  - ingress.yaml
-  - certificate.yaml
+- ../../base
+- ingress.yaml
+- certificate.yaml
 
 images:
-  - name: landing
-    newName: ghcr.io/jaennil/landing
-    newTag: latest
+- name: landing
+  newName: ghcr.io/jaennil/landing
+  newTag: 76ad5fb5fa75d31190a86e132c8e9c435a8a50ab
